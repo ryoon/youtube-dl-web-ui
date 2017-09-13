@@ -1,5 +1,9 @@
 # Web interface of youtube-dl command
 
+To download YouTube videos, youtube-dl command is reliable way.
+There are many Firefox add-ons to download YouTube videos,
+however almost all free add-ons does not work as expected.
+
 ## How to start
 This uses youtube-dl, Flask and Python 3.6.
 
