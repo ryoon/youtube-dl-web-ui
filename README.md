@@ -20,3 +20,6 @@ $ ~/youtube-dl-web-ui/pkg/bin/python3.6 app.py
 ```
 
 And open http://localhost:5000/ with your browser on localhost.
+
+## Bugs
+* Not secure for the internet use
