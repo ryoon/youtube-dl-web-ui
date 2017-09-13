@@ -30,3 +30,6 @@ And open http://localhost:5000/ with your browser on localhost.
 
 ## Plans
 * Support nicovideo.jp download
+
+## Contact
+Ryo ONODERA <ryo@tetera.org>
