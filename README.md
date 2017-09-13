@@ -27,3 +27,6 @@ And open http://localhost:5000/ with your browser on localhost.
 
 ## Bugs
 * Not secure for the internet use
+
+## Plans
+* Support nicovideo.jp download
