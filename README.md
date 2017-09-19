@@ -20,7 +20,7 @@ $ ~/youtube-dl-web-ui/pkg/bin/bmake install
 $ cd pkgsrc/net/youtube-dl
 $ ~/youtube-dl-web-ui/pkg/bin/bmake install
 $ cd ~/youtube-dl-web-ui/app
-$ ~/youtube-dl-web-ui/pkg/bin/python3.6 app.py
+$ LANG=ja_JP.UTF-8 ~/youtube-dl-web-ui/pkg/bin/python3.6 app.py
 ```
 
 And open http://localhost:5000/ with your browser on localhost.
