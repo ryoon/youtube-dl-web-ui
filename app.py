@@ -45,7 +45,7 @@ def main():
 def downloadVideo():
   inputURI = request.form['inputURI']
   if inputURI:
-    command = ('cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--get-filename ' + inputURI)
+    command = ('cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--get-filename --format best[ext=mp4] ' + inputURI)
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
     print(videoFilename)
     command = ('cd static && /home/ryoon/youtube-dl-web-ui/bin/' + 'youtube-dl ' + '--format best[ext=mp4] ' + inputURI)
