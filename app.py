@@ -44,17 +44,27 @@ def main():
 @app.route('/downloadVideo', methods=['POST'])
 def downloadVideo():
   inputURI = request.form['inputURI']
-  if inputURI:
-    command = ('cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--get-filename --format best[ext=mp4] ' + inputURI)
+  hostname = urllib.parse.urlparse(inputURI).netloc
+  if hostname == 'www.nicovideo.jp':
+    print('nicovideo.jp case')
+    nico_userID = request.form['userID']
+    nico_password = request.form['password']
+    command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--get-filename --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
-    print(videoFilename)
-    command = ('cd static && /home/ryoon/youtube-dl-web-ui/bin/' + 'youtube-dl ' + '--format best[ext=mp4] ' + inputURI)
-    error = get_command_ret(command)
-    print(error)
-    if error == 0:
-      return json.dumps({'html': '<span>Downloaded: <a href="static/' + urllib.parse.quote(videoFilename) + '" download>'+ videoFilename + '</a></span><br>'})
-    else:
-      return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
+    command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + ' --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
+
+  elif hostname == 'www.youtube.com':
+    command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--get-filename --format best[ext=mp4] ' + inputURI
+    videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
+    command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--format best[ext=mp4] ' + inputURI
+  else:
+    return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
+
+  print(command)
+  error = get_command_ret(command)
+  print(error)
+  if error == 0:
+    return json.dumps({'html': '<span>Downloaded: <a href="static/' + urllib.parse.quote(videoFilename) + '" download>'+ videoFilename + '</a></span><br>'})
   else:
     return json.dumps({'html': '<span>Please input a URI.<span><br>'})
 

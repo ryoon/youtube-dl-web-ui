@@ -16,8 +16,12 @@
     <div class="jumbotron">
       <h2>Enter URI to download the video below</h2>
       <form id="formDownload">
-        <input type="text" name="inputURI" id="inputURI" class="form-control" placeholder="your video URI" required autofocus>
+        <input type="text" name="inputURI" id="inputURI" class="form-control" placeholder="your YouTube or nicovideo.jp video URI" required autofocus>
         <button id="buttonDownload" type="button" class="btn btn-lg btn-primary btn-block">download</button>
+        <span>nicovideo.jp user ID</span>
+        <input type="text" name="userID" id="userID" class="form-control" placeholder="your nicovideo.jp user ID">
+        <span>nicovideo.jp password</span>
+        <input type="password" name="password" id="password" class="form-control" placeholder="your nicovideo.jp password">
       </form>
       <div id="respMessage"></div>
     </div>
