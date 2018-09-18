@@ -23,40 +23,38 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from flask import Flask, render_template, json, request
+from flask import Flask, render_template, json, request, make_response
 app = Flask(__name__)
 
-import subprocess
-import urllib.parse
+from subprocess import Popen, PIPE
+from urllib.parse import quote
 
-def get_command_resp(command):
-  return subprocess.Popen(command, stdout=subprocess.PIPE,
-    shell=True).communicate()
-
-def get_command_ret(command):
-  return subprocess.Popen(command, stdout=subprocess.PIPE,
-    shell=True).wait()
-
-@app.route('/')
-def main():
-  return render_template('index.html')
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return render_template('index.html')
 
 @app.route('/downloadVideo', methods=['POST'])
 def downloadVideo():
-  inputURI = request.form['inputURI']
-  if inputURI:
-    command = ('cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--get-filename ' + inputURI)
-    videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
-    print(videoFilename)
-    command = ('cd static && /home/ryoon/youtube-dl-web-ui/bin/' + 'youtube-dl ' + '--format best[ext=mp4] ' + inputURI)
-    error = get_command_ret(command)
-    print(error)
-    if error == 0:
-      return json.dumps({'html': '<span>Downloaded: <a href="static/' + urllib.parse.quote(videoFilename) + '" download>'+ videoFilename + '</a></span><br>'})
-    else:
-      return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
-  else:
-    return json.dumps({'html': '<span>Please input a URI.<span><br>'})
+    inputURI = request.form['inputURI']
+
+    if inputURI:
+      command = '/home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--format best[ext=mp4] --get-filename ' + inputURI
+      process = Popen(command.split(), stdout=PIPE)
+      stdout, error = process.communicate()
+      exit_code = process.wait()
+      if exit_code == 0:
+        filename = stdout.strip().decode('utf-8')
+      else:
+        return render_template('index_error.html')
+      command = '/home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--format best[ext=mp4] ' + '-o - ' + inputURI
+      process = Popen(command.split(), stdout=PIPE)
+      stdout, error = process.communicate()
+      exit_code = process.wait()
+      if exit_code == 0:
+        response = make_response(stdout)
+        response.headers['Content-Disposition'] = 'attachment;' "filename*=UTF-8''{utf8_filename}".format(utf8_filename=quote(filename))
+        response.mimetype = 'application/octet-stream'
+        return render_template('index.html')
 
 if __name__ == "__main__":
-  app.run()
+  app.run(debug=True)
