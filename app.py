@@ -58,7 +58,13 @@ def downloadVideo():
     print('youtube case')
     command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '--get-filename ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
-    command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--format best[ext=mp4] ' + inputURI
+    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + inputURI
+  elif hostname == 'tver.jp':
+    print('TVer case')
+    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '--get-filename ' + inputURI
+    videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
+    print(videoFilename)
+    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '-w ' + inputURI
   else:
     return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
 
