@@ -64,6 +64,7 @@ def downloadVideo():
 
   print(command)
   error = get_command_ret(command)
+  print("Download has finished.")
   print(error)
   if error == 0:
     return json.dumps({'html': '<span>Downloaded: <a href="static/' + urllib.parse.quote(videoFilename) + '" download>'+ videoFilename + '</a></span><br>'})
