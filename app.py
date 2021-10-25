@@ -43,18 +43,20 @@ def main():
 
 @app.route('/downloadVideo', methods=['POST'])
 def downloadVideo():
+  ytdlpath = '/share/c/youtube-dl-web-ui/pkg/bin/'
   inputURI = request.form['inputURI']
   hostname = urllib.parse.urlparse(inputURI).netloc
   if hostname == 'www.nicovideo.jp':
     print('nicovideo.jp case')
     nico_userID = request.form['userID']
     nico_password = request.form['password']
-    command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--get-filename --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '--get-filename --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
-    command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + ' --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + ' --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
 
   elif hostname == 'www.youtube.com':
-    command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--get-filename --format best[ext=mp4] ' + inputURI
+    print('youtube case')
+    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '--get-filename ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
     command = 'cd static && /home/ryoon/youtube-dl-web-ui/pkg/bin/' + 'youtube-dl ' + '--format best[ext=mp4] ' + inputURI
   else:
