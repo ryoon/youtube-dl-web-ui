@@ -34,7 +34,7 @@ def get_command_resp(command):
     shell=True).communicate()
 
 def get_command_ret(command):
-  return subprocess.Popen(command, stdout=subprocess.PIPE,
+  return subprocess.Popen(command, stdout=None,
     shell=True).wait()
 
 @app.route('/')
