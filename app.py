@@ -46,6 +46,7 @@ def downloadVideo():
   ytdlpath = '/share/c/youtube-dl-web-ui/pkg/bin/'
   inputURI = request.form['inputURI']
   hostname = urllib.parse.urlparse(inputURI).netloc
+  print(inputURI)
   if hostname == 'www.nicovideo.jp':
     print('nicovideo.jp case')
     nico_userID = request.form['userID']
