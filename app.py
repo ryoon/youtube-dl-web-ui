@@ -43,7 +43,7 @@ def main():
 
 @app.route('/downloadVideo', methods=['POST'])
 def downloadVideo():
-  ytdlpath = '/share/c/youtube-dl-web-ui/pkg/bin/'
+  ytdlpath = '/share/c/youtube-dl-web-ui/pkg/bin/yt-dlp'
   inputURI = request.form['inputURI']
   hostname = urllib.parse.urlparse(inputURI).netloc
   print(inputURI)
@@ -51,21 +51,21 @@ def downloadVideo():
     print('nicovideo.jp case')
     nico_userID = request.form['userID']
     nico_password = request.form['password']
-    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '--get-filename --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --get-filename --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
-    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + ' --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
 
   elif hostname == 'www.youtube.com':
     print('youtube case')
-    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '--get-filename ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --get-filename ' + '--format best[ext=mp4] ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
-    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --format best[ext=mp4] ' + inputURI
   elif hostname == 'tver.jp':
     print('TVer case')
-    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '--get-filename ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --get-filename ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
     print(videoFilename)
-    command = 'cd static && ' + ytdlpath + 'youtube-dl ' + '-w ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' -w ' + inputURI
   else:
     return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
 
