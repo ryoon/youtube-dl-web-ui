@@ -65,7 +65,7 @@ def downloadVideo():
     command = 'cd static && ' + ytdlpath + ' --get-filename ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
     print(videoFilename)
-    command = 'cd static && ' + ytdlpath + ' -w ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' -w --concurrent-fragments 3 ' + inputURI
   else:
     return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
 
