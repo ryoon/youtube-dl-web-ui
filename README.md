@@ -9,7 +9,7 @@ and it downloads videos very slowly (throttled).
 yt-dlp has no problem for download rate.
 
 ## How to start
-This uses yt-dlp, Flask and Python 3.9.
+This uses yt-dlp, Flask 1.1.4/2.0.2 and Python 3.9.
 
 For pkgsrc users, please run as follows.
 (Be sure to install pkgsrc/net/yt-dlp 2021.10.22nb1 or later for TVer.)
