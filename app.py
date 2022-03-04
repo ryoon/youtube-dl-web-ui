@@ -46,7 +46,7 @@ def downloadVideo():
   ytdlpath = '/share/c/youtube-dl-web-ui/pkg/bin/yt-dlp'
   inputURI = request.form['inputURI']
   hostname = urllib.parse.urlparse(inputURI).netloc
-  youtubeMaxFilenameLength = 86
+  youtubeMaxFilenameLength = 234
 
   print(inputURI)
   if hostname == 'www.nicovideo.jp':
@@ -59,15 +59,15 @@ def downloadVideo():
 
   elif hostname == 'www.youtube.com':
     print('youtube case')
-    command = 'cd static && ' + ytdlpath + ' --trim-filenames ' + str(youtubeMaxFilenameLength) + ' --get-filename ' + '--format best[ext=mp4] ' + inputURI
-    videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
-    command = 'cd static && ' + ytdlpath + ' --trim-filenames ' + str(youtubeMaxFilenameLength) + ' --format best[ext=mp4] ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --get-filename ' + '--format best[ext=mp4] ' + inputURI
+    videoFilename = get_command_resp(command)[0].strip()[0:youtubeMaxFilenameLength].decode(encoding='utf-8', errors='ignore').replace('.mp4', '') + '.mp4'
+    command = 'cd static && ' + ytdlpath + ' -o "' + videoFilename + '" --format best[ext=mp4] ' + inputURI
   elif hostname == 'tver.jp':
     print('TVer case')
     command = 'cd static && ' + ytdlpath + ' --get-filename ' + inputURI
-    videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
+    videoFilename = get_command_resp(command)[0].strip()[0:youtubeMaxFilenameLength].decode(encoding='utf-8', errors='ignore').replace('.mp4', '') + '.mp4'
     print(videoFilename)
-    command = 'cd static && ' + ytdlpath + ' -w --concurrent-fragments 3 ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' -o "' + videoFilename + '" -w --concurrent-fragments 3 ' + inputURI
   else:
     return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
 
