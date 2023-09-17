@@ -1,4 +1,4 @@
-# Copyright (c) 2017, 2018, 2021, 2022 Ryo ONODERA <ryo@tetera.org>
+# Copyright (c) 2017, 2018, 2021, 2022, 2023 Ryo ONODERA <ryo@tetera.org>
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,8 @@ def main():
 
 @app.route('/downloadVideo', methods=['POST'])
 def downloadVideo():
-  ytdlpath = '/share/c/youtube-dl-web-ui/pkg/bin/yt-dlp'
+  ytdlpath = '/usr/pkg/bin/yt-dlp'
+  ffmpegPath = '/usr/pkg/bin/ffmpeg5'
   inputURI = request.form['inputURI']
   hostname = urllib.parse.urlparse(inputURI).netloc
   youtubeMaxFilenameLength = 234
@@ -61,13 +62,13 @@ def downloadVideo():
     print('youtube case')
     command = 'cd static && ' + ytdlpath + ' --get-filename ' + '--format best[ext=mp4] ' + inputURI
     videoFilename = get_command_resp(command)[0].strip()[0:youtubeMaxFilenameLength].decode(encoding='utf-8', errors='ignore').replace('.mp4', '') + '.mp4'
-    command = 'cd static && ' + ytdlpath + ' -o "' + videoFilename + '" --format best[ext=mp4] ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' -o "' + videoFilename + '" --format best[ext=mp4] ' + ' --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
   elif hostname == 'tver.jp':
     print('TVer case')
     command = 'cd static && ' + ytdlpath + ' --get-filename ' + inputURI
     videoFilename = get_command_resp(command)[0].strip()[0:youtubeMaxFilenameLength].decode(encoding='utf-8', errors='ignore').replace('.mp4', '') + '.mp4'
     print(videoFilename)
-    command = 'cd static && ' + ytdlpath + ' -o "' + videoFilename + '" -w --concurrent-fragments 3 ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' -o "' + videoFilename + '" -w --concurrent-fragments 3 ' + ' --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
   else:
     return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
 
