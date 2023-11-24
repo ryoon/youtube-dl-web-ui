@@ -9,7 +9,7 @@ and it downloads videos very slowly (throttled).
 yt-dlp has no problem for download rate.
 
 ## How to start
-This uses yt-dlp, Flask 1.1.4/2.0.2 and Python 3.9.
+This uses yt-dlp, Flask 3.0.0 and Python 3.11.
 
 For pkgsrc users, please run as follows.
 (Be sure to install pkgsrc/net/yt-dlp 2021.10.22nb1 or later for TVer.)
@@ -29,11 +29,11 @@ $ LANG=ja_JP.UTF-8 ~/youtube-dl-web-ui/pkg/bin/python3.9 app.py
 ```
 
 For TVer.jp downloads, you should install FFmpeg.
-For pkgsrc users, please install multimedia/ffmpeg4 as follows.
+For pkgsrc users, please install multimedia/ffmpeg6 as follows.
 And your PATH environment variable must contain ~/youtube-dl-web-ui/pkg/bin.
 
 ```
-$ cd pkgsrc/multimedia/ffmpeg4
+$ cd pkgsrc/multimedia/ffmpeg6
 $ ~/youtube-dl-web-ui/pkg/bin/bmake install
 ```
 
