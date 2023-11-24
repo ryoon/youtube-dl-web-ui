@@ -44,7 +44,7 @@ def main():
 @app.route('/downloadVideo', methods=['POST'])
 def downloadVideo():
   ytdlpath = '/usr/pkg/bin/yt-dlp'
-  ffmpegPath = '/usr/pkg/bin/ffmpeg5'
+  ffmpegPath = '/usr/pkg/bin/ffmpeg6'
   inputURI = request.form['inputURI']
   hostname = urllib.parse.urlparse(inputURI).netloc
   youtubeMaxFilenameLength = 234
