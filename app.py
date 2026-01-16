@@ -60,16 +60,16 @@ def downloadVideo():
 
   elif hostname == 'www.youtube.com':
     print('youtube case')
-    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --get-filename --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --output "%(title).150B [%(id)s].%(ext)s" --get-filename --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
     videoFilename = get_command_resp(command)[0].decode(encoding='utf-8', errors='ignore')
     print('videoFilename =', videoFilename)
     command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
   elif hostname == 'tver.jp':
     print('TVer case')
-    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --trim-filenames 35 --get-filename ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --output "%(title).150B [%(id)s].%(ext)s" --get-filename ' + inputURI
     videoFilename = get_command_resp(command)[0].decode(encoding='utf-8', errors='ignore')
     print('videoFilename = ', videoFilename)
-    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs -w --concurrent-fragments 3 ' + '--trim-filenames 35 --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs -w --concurrent-fragments 3 ' + '--output "%(title).150B [%(id)s].%(ext)s" --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
   else:
     return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
 
