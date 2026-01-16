@@ -44,7 +44,7 @@ def main():
 @app.route('/downloadVideo', methods=['POST'])
 def downloadVideo():
   ytdlpath = '/usr/pkg/bin/yt-dlp'
-  ffmpegPath = '/usr/pkg/bin/ffmpeg6'
+  ffmpegPath = '/usr/pkg/bin/ffmpeg7'
   inputURI = request.form['inputURI']
   hostname = urllib.parse.urlparse(inputURI).netloc
   youtubeMaxFilenameLength = 234
@@ -54,21 +54,22 @@ def downloadVideo():
     print('nicovideo.jp case')
     nico_userID = request.form['userID']
     nico_password = request.form['password']
-    command = 'cd static && ' + ytdlpath + ' --get-filename --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --get-filename --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
     videoFilename = get_command_resp(command)[0].strip().decode('utf-8')
-    command = 'cd static && ' + ytdlpath + ' --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --format best[ext=mp4] --username ' + nico_userID + ' --password ' + nico_password + ' ' + inputURI
 
   elif hostname == 'www.youtube.com':
     print('youtube case')
-    command = 'cd static && ' + ytdlpath + ' --get-filename ' + '--format best[ext=mp4] ' + inputURI
-    videoFilename = get_command_resp(command)[0].strip()[0:youtubeMaxFilenameLength].decode(encoding='utf-8', errors='ignore').replace('.mp4', '') + '.mp4'
-    command = 'cd static && ' + ytdlpath + ' -o "' + videoFilename + '" --format best[ext=mp4] ' + ' --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --get-filename --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
+    videoFilename = get_command_resp(command)[0].decode(encoding='utf-8', errors='ignore')
+    print('videoFilename =', videoFilename)
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
   elif hostname == 'tver.jp':
     print('TVer case')
-    command = 'cd static && ' + ytdlpath + ' --get-filename ' + inputURI
-    videoFilename = get_command_resp(command)[0].strip()[0:youtubeMaxFilenameLength].decode(encoding='utf-8', errors='ignore').replace('.mp4', '') + '.mp4'
-    print(videoFilename)
-    command = 'cd static && ' + ytdlpath + ' -o "' + videoFilename + '" -w --concurrent-fragments 3 ' + ' --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs --trim-filenames 35 --get-filename ' + inputURI
+    videoFilename = get_command_resp(command)[0].decode(encoding='utf-8', errors='ignore')
+    print('videoFilename = ', videoFilename)
+    command = 'cd static && ' + ytdlpath + ' --js-runtimes quickjs -w --concurrent-fragments 3 ' + '--trim-filenames 35 --ffmpeg-location ' + ffmpegPath + ' ' + inputURI
   else:
     return json.dumps({'html': '<span>Download failed with error code: ' + str(error) + '</span><br>'})
 
@@ -77,7 +78,7 @@ def downloadVideo():
   print("Download has finished.")
   print(error)
   if error == 0:
-    return json.dumps({'html': '<span>Downloaded: <a href="static/' + urllib.parse.quote(videoFilename) + '" download>'+ videoFilename + '</a></span><br>'})
+    return json.dumps({'html': '<span>Downloaded: <a href="static/' + urllib.parse.quote(videoFilename).rstrip('%0A') + '" download>'+ videoFilename + '</a></span><br>'})
   else:
     return json.dumps({'html': '<span>Please input a URI.<span><br>'})
 
